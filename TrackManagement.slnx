@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="docker-compose.dcproj">
+      <Build />
+    </Project>
+    <Project Path="src/TrackManagement.API/TrackManagement.API.csproj" />
+    <Project Path="src/TrackManagement.Application/TrackManagement.Application.csproj" Id="82055e06-495e-4ba8-a3d2-7255fa334cb7" />
+    <Project Path="src/TrackManagement.Domain/TrackManagement.Domain.csproj" Id="4fd9f2d2-1c0d-46c1-95f4-0f0000c86a66" />
+    <Project Path="src/TrackManagement.Infrastructure/TrackManagement.Infrastructure.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,6 @@
+services:
+  trackmanagement.api:
+    image: ${DOCKER_REGISTRY-}trackmanagementapi
+    build:
+      context: .
+      dockerfile: src/TrackManagement.API/Dockerfile
