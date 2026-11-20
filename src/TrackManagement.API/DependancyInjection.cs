@@ -1,4 +1,6 @@
-﻿namespace TrackManagement.API;
+﻿using Microsoft.OpenApi;
+
+namespace TrackManagement.API;
 
 public static class DependancyInjection
 {
@@ -6,7 +8,22 @@ public static class DependancyInjection
     {
         services.AddMemoryCache()
             .AddEndpointsApiExplorer()
-            .AddSwaggerGen();
+            .AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT bearer token."
+                });
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Bearer", document, null)] = []
+                });
+            });
 
         return services;
     }
