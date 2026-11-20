@@ -1,0 +1,67 @@
+<section class="page">
+  <a class="back-link" routerLink="/tracks"><span aria-hidden="true">←</span> ALL TRACKS</a>
+
+  @if (isLoading()) {
+    <div class="detail-state" role="status"><span class="loader"></span> Loading track details…</div>
+  } @else if (errorMessage()) {
+    <div class="detail-state error-state" role="alert">
+      <span>{{ errorMessage() }}</span>
+      <button type="button" (click)="retry()">Try again</button>
+      <a routerLink="/tracks">Back to tracks</a>
+    </div>
+  } @else if (track(); as selectedTrack) {
+    <div class="detail-heading">
+      <div class="cover-art" aria-hidden="true"><span>{{ selectedTrack.title.charAt(0).toUpperCase() }}</span><small>TRACKFLOW<br />RELEASE</small></div>
+      <div class="heading-copy">
+        <div class="page-topline"><span>TRACK DETAILS</span><span class="topline-dot"></span><span>RELEASE #{{ selectedTrack.id.toString().padStart(3, '0') }}</span></div>
+        <h1>{{ selectedTrack.title }}<span class="heading-period">.</span></h1>
+        <p class="artist-name">{{ selectedTrack.artistName }}</p>
+        <span class="status-badge" [class.status-draft]="selectedTrack.status === 'Draft'" [class.status-submitted]="selectedTrack.status === 'Submitted'" [class.status-distributed]="selectedTrack.status === 'Distributed'">
+          <span></span>{{ selectedTrack.status }}
+        </span>
+      </div>
+    </div>
+
+    <section class="info-card" aria-labelledby="release-info-heading">
+      <div class="section-heading">
+        <div><span class="section-kicker">THE ESSENTIALS</span><h2 id="release-info-heading">Release information</h2></div>
+        <span class="music-note">♫</span>
+      </div>
+      <div class="metadata-grid">
+        <div class="metadata-item"><span>ARTIST</span><strong>{{ selectedTrack.artistName }}</strong></div>
+        <div class="metadata-item"><span>GENRE</span><strong>{{ selectedTrack.genre }}</strong></div>
+        <div class="metadata-item"><span>RELEASE DATE</span><strong>{{ selectedTrack.releaseDate | date: 'MMMM d, y' }}</strong></div>
+        <div class="metadata-item"><span>ISRC</span><strong class="isrc">{{ selectedTrack.iSrc }}</strong></div>
+      </div>
+    </section>
+
+    <section class="distribution-section" aria-labelledby="distribution-heading">
+      <div class="distribution-heading">
+        <div>
+          <span class="section-kicker">OUT IN THE WORLD</span>
+          <h2 id="distribution-heading">Distribution <span>{{ selectedTrack.distributions.length.toString().padStart(2, '0') }}</span></h2>
+          <p>Platforms receiving this release and their current status.</p>
+        </div>
+      </div>
+
+      @if (selectedTrack.distributions.length === 0) {
+        <div class="distribution-empty">
+          <span>♫</span>
+          <div><strong>Not distributed yet</strong><p>When this release is sent to platforms, you’ll see its progress here.</p></div>
+        </div>
+      } @else {
+        <div class="distribution-list">
+          @for (distribution of selectedTrack.distributions; track distribution.dspId) {
+            <div class="distribution-row">
+              <div class="dsp-icon">{{ distribution.dspName.charAt(0).toUpperCase() }}</div>
+              <div class="dsp-copy"><strong>{{ distribution.dspName }}</strong><span>Added {{ distribution.submittedAt | date: 'MMM d, y' }}</span></div>
+              <span class="status-badge" [class.distribution-live]="distribution.status === 'Live'" [class.distribution-pending]="distribution.status === 'Pending'" [class.distribution-rejected]="distribution.status === 'Rejected'">
+                <span></span>{{ distribution.status }}
+              </span>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+</section>

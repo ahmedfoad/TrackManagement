@@ -1,0 +1,80 @@
+<main class="login-page min-h-screen">
+  <section class="login-story" aria-label="Trackflow introduction">
+    <a class="brand" routerLink="/login" aria-label="Trackflow">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>trackflow<span class="brand-period">.</span></span>
+    </a>
+    <div class="story-content">
+      <div class="eyebrow"><span></span> MUSIC DISTRIBUTION</div>
+      <h1>Every release has a <em>destination.</em></h1>
+      <p>One calm place for your music, your catalog, and every platform.</p>
+      <div class="story-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="vinyl"><div class="vinyl-center"><span>tf</span></div></div>
+        <span class="spark spark-one">✳</span>
+        <span class="spark spark-two">✳</span>
+      </div>
+    </div>
+    <div class="story-footer"><span>INDEPENDENT BY NATURE.</span><span>© 2026 TRACKFLOW</span></div>
+  </section>
+
+  <section class="login-panel">
+    <div class="login-form-wrap">
+      <div class="mobile-brand">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>trackflow<span class="brand-period">.</span></span>
+      </div>
+      <div class="form-heading">
+        <span class="form-kicker">WELCOME BACK</span>
+        <h2>Sign in to your<br class="mobile-break" /> workspace</h2>
+        <p>Pick up right where your music left off.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <label for="email">Email address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@yourmusic.com"
+          autocomplete="email"
+          [class.invalid]="form.controls.email.touched && form.controls.email.invalid"
+        />
+        @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+          <span class="field-error">Enter your email address.</span>
+        } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+          <span class="field-error">Enter a valid email address.</span>
+        }
+
+        <div class="password-label">
+          <label for="password">Password</label>
+        </div>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          [class.invalid]="form.controls.password.touched && form.controls.password.invalid"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <span class="field-error">Enter your password.</span>
+        }
+
+        @if (errorMessage()) {
+          <div class="form-error" role="alert">{{ errorMessage() }}</div>
+        }
+        <button class="submit-button" type="submit" [disabled]="isLoading() || form.invalid">
+          @if (isLoading()) {
+            <span class="spinner"></span> Signing in…
+          } @else {
+            Sign in <span aria-hidden="true">→</span>
+          }
+        </button>
+      </form>
+
+      <div class="secure-note"><span>●</span> YOUR CATALOG IS SAFE WITH US</div>
+    </div>
+  </section>
+</main>

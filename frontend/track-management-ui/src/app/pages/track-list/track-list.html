@@ -1,0 +1,73 @@
+<section class="page">
+  <div class="page-topline"><span>YOUR CATALOG</span><span class="topline-dot"></span><span>OVERVIEW</span></div>
+
+  <div class="page-heading">
+    <div>
+      <h1>Your tracks<span class="heading-period">.</span></h1>
+      <p>A little overview of everything you’re putting out into the world.</p>
+    </div>
+    <div class="catalog-total"><span>{{ tracks().length.toString().padStart(2, '0') }}</span> TRACKS</div>
+  </div>
+
+  <div class="list-tools">
+    <div class="list-intro">
+      <h2>All releases <span>{{ tracks().length }}</span></h2>
+      <p>Click a track to see its distribution details.</p>
+    </div>
+    <label class="filter">
+      <span>STATUS</span>
+      <select [value]="status()" (change)="setStatus($event)" aria-label="Filter tracks by status">
+        <option value="">All statuses</option>
+        <option value="Draft">Draft</option>
+        <option value="Submitted">Submitted</option>
+        <option value="Distributed">Distributed</option>
+      </select>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5" /></svg>
+    </label>
+  </div>
+
+  <div class="track-list">
+    <div class="table-head">
+      <span>TRACK</span><span>GENRE</span><span>RELEASE DATE</span><span>STATUS</span><span></span>
+    </div>
+
+    @if (isLoading()) {
+      <div class="state-card" role="status"><span class="loader"></span><span>Loading your tracks…</span></div>
+    } @else if (errorMessage()) {
+      <div class="state-card error-state" role="alert">
+        <span>{{ errorMessage() }}</span>
+        <button type="button" (click)="retry()">Try again</button>
+      </div>
+    } @else if (tracks().length === 0) {
+      <div class="state-card">
+        <span class="empty-note">♫</span>
+        <strong>No tracks here just yet</strong>
+        <span>Try a different status filter to find your releases.</span>
+      </div>
+    } @else {
+      @for (track of tracks(); track track.id; let index = $index) {
+        <a class="track-row" [routerLink]="['/tracks', track.id]">
+          <span class="track-main">
+            <span class="track-art art-{{ index % 5 }}">
+              <span>{{ track.title.charAt(0).toUpperCase() }}</span>
+            </span>
+            <span class="track-copy">
+              <strong>{{ track.title }}</strong>
+              <span>{{ track.artistName }}</span>
+            </span>
+          </span>
+          <span class="genre">{{ track.genre }}</span>
+          <span class="release-date">{{ track.releaseDate | date: 'MMM d, y' }}</span>
+          <span class="status-cell">
+            <span class="status-badge" [class.status-draft]="track.status === 'Draft'" [class.status-submitted]="track.status === 'Submitted'" [class.status-distributed]="track.status === 'Distributed'">
+              <span></span>{{ track.status }}
+            </span>
+          </span>
+          <span class="row-arrow" aria-hidden="true">↗</span>
+        </a>
+      }
+    }
+  </div>
+
+  <div class="list-footnote"><span class="footnote-icon">✳</span> YOUR MUSIC IS IN GOOD COMPANY. KEEP CREATING.</div>
+</section>

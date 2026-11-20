@@ -1,0 +1,42 @@
+<div class="workspace min-h-screen">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/tracks" aria-label="Trackflow home">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>trackflow<span class="brand-period">.</span></span>
+    </a>
+
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-link active" routerLink="/tracks">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zm4 1.5v10m4-10v10m4-10v10" /></svg>
+      <span>Tracks</span>
+    </a>
+    <div class="sidebar-note">
+      <span class="note-icon">♫</span>
+      <p>Your music, everywhere.</p>
+      <span>Keep every release moving.</span>
+    </div>
+
+    <div class="profile">
+      <div class="avatar">{{ auth.username().charAt(0).toUpperCase() || 'U' }}</div>
+      <div class="profile-copy">
+        <strong>{{ auth.username() || 'Your account' }}</strong>
+        <span>Artist workspace</span>
+      </div>
+      <button class="sign-out" type="button" aria-label="Sign out" (click)="signOut()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5m5 5H3m9-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" /></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="mobile-header">
+      <a class="brand" routerLink="/tracks">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>trackflow<span class="brand-period">.</span></span>
+      </a>
+      <button class="mobile-sign-out" type="button" (click)="signOut()">Sign out</button>
+    </header>
+    <router-outlet />
+    <footer class="footer"><span>MADE FOR THE MUSIC</span><span>© 2026 TRACKFLOW</span></footer>
+  </main>
+</div>
