@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TrackManagement.Domain.Entities.Abstracts;
 
-namespace TrackManagement.Domain.Entities
+namespace TrackManagement.Domain.Entities;
+
+public class Dsp : BaseEntity<int>
 {
-    internal class Dsp
-    {
-    }
+    public required string Name { get; set; }
+
+    public ICollection<TrackDistribution> TrackDistributions { get; set; }
 }

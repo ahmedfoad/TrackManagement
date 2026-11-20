@@ -1,5 +1,9 @@
 ﻿namespace TrackManagement.Domain.Enums;
 
-internal class TrackStatus
+public enum TrackStatus
 {
+    Draft,
+    Submitted,
+    Distributed
 }
+

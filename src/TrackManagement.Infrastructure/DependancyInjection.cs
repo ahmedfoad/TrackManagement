@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TrackManagement.Infrastructure;
@@ -7,13 +8,19 @@ public static class DependancyInjection
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Database")
+        var defaultConnectionString = configuration.GetConnectionString("Database");
+        var writeConnectionString = configuration.GetConnectionString("WriteDatabase")
+            ?? defaultConnectionString
             ?? throw new InvalidOperationException(
-                "Connection string 'Database' is not configured. Set ConnectionStrings__Database to the SQL Server connection string.");
+                "Connection string 'WriteDatabase' or 'Database' is not configured.");
+        var readConnectionString = configuration.GetConnectionString("ReadDatabase")
+            ?? defaultConnectionString
+            ?? writeConnectionString;
 
-        //services.AddDbContext<SubmissionDbContext>(options => options.UseSqlServer(connectionString));
-        //services.AddScoped(typeof(Repository<,>));
-        //services.AddScoped<ArticleRepository>();
+        services.AddDbContext<TrackManagementDbContext>(options =>
+            options.UseSqlServer(writeConnectionString));
+        services.AddDbContext<TrackManagementReadonlyDbContext>(options =>
+            options.UseSqlServer(readConnectionString));
 
         return services;
     }
