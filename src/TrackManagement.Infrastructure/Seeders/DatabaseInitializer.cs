@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TrackManagement.Domain.Entities;
 using TrackManagement.Domain.Enums;
 
-namespace TrackManagement.Infrastructure;
+namespace TrackManagement.Infrastructure.Seeders;
 
 public static class DatabaseInitializer
 {

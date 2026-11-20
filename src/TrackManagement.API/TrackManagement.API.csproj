@@ -25,8 +25,4 @@
     <ProjectReference Include="..\TrackManagement.Application\TrackManagement.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

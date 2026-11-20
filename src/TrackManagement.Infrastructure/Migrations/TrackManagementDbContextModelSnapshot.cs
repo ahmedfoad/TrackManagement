@@ -16,7 +16,7 @@ partial class TrackManagementDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261120171404_InitialCreate";
+    public override string LastMigrationId => "20261120190438_AddUserIdentity";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -53,6 +53,89 @@ partial class TrackManagementDbContextModelSnapshot : ModelSnapshot
                 b.HasKey("Id");
 
                 b.ToTable("Artists");
+            });
+
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.Role", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("Name")
+                    .IsUnique();
+
+                b.ToTable("Roles");
+            });
+
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.User", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("nvarchar(255)");
+
+                b.Property<bool>("IsActive")
+                    .HasColumnType("bit");
+
+                b.Property<string>("PasswordHash")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Username")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("Email")
+                    .IsUnique();
+
+                b.HasIndex("Username")
+                    .IsUnique();
+
+                b.ToTable("Users");
+            });
+
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.UserRole", b =>
+            {
+                var id = b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<int>("RoleId")
+                    .HasColumnType("int");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("RoleId");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("UserRoles");
             });
 
         modelBuilder.Entity("TrackManagement.Domain.Entities.Dsp", b =>
@@ -144,6 +227,25 @@ partial class TrackManagementDbContextModelSnapshot : ModelSnapshot
                 b.ToTable("TrackDistributions");
             });
 
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.UserRole", b =>
+            {
+                b.HasOne("TrackManagement.Domain.Entities.Auth.Role", "Role")
+                    .WithMany("UserRoles")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("TrackManagement.Domain.Entities.Auth.User", "User")
+                    .WithMany("UserRoles")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Role");
+
+                b.Navigation("User");
+            });
+
         modelBuilder.Entity("TrackManagement.Domain.Entities.Track", b =>
             {
                 b.HasOne("TrackManagement.Domain.Entities.Artist", "Artist")
@@ -177,6 +279,16 @@ partial class TrackManagementDbContextModelSnapshot : ModelSnapshot
         modelBuilder.Entity("TrackManagement.Domain.Entities.Artist", b =>
             {
                 b.Navigation("Tracks");
+            });
+
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.Role", b =>
+            {
+                b.Navigation("UserRoles");
+            });
+
+        modelBuilder.Entity("TrackManagement.Domain.Entities.Auth.User", b =>
+            {
+                b.Navigation("UserRoles");
             });
 
         modelBuilder.Entity("TrackManagement.Domain.Entities.Dsp", b =>
