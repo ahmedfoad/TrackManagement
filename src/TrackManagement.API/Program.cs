@@ -21,6 +21,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+await app.Services.InitializeDatabaseAsync();
+
 app.UseSwagger()
    .UseSwaggerUI()
    .UseRouting();
